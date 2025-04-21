@@ -105,4 +105,12 @@ object Vector2D:
   // (6.0, 18.0) - (1.0, 1.0) = (5.0, 17.0)
   println(s"Multiple Ops: $multipleOps, x: ${multipleOps.x}, y: ${multipleOps.y}")
 
+  // Checking equality (==) and toString behavior
+  val v3 = Vector2D(1.0, 1.0)
+  val v4 = Vector2D(1.0, 1.0)
 
+  println(v3) // ex.Vector2D$Vector2DImpl@hashcode
+  println(v4) // ex.Vector2D$Vector2DImpl@hashcode
+  /* Quando usi una normal class, il metodo == (che invoca equals) verifica se i due
+  oggetti confrontati sono lo stesso oggetto in memoria */
+  println(v3 == v4)
