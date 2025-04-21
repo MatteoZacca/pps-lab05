@@ -25,9 +25,31 @@ trait Vector2D:
 
 object Vector2D:
   // Factory method to create Vector2D instances
-  def apply(x: Double, y: Double): Vector2D = ???
+  def apply(x: Double, y: Double): Vector2D =
+    Vector2DImpl(x, y)
+
+  private class Vector2DImpl(override val x: Double,
+                             override val y: Double) extends Vector2D:
+    override def +(other: Vector2D): Vector2D =
+      Vector2DImpl(this.x + other.x, this.y + other.y)
+
+    override def -(other: Vector2D): Vector2D =
+      Vector2DImpl(this.x - other.x, this.y - other.y)
+
+    override def *(scalar: Double): Vector2D =
+      Vector2DImpl(this.x * scalar, this.y * scalar)
+
+    override def dot(other: Vector2D): Double =
+      (this.x * other.x) + (this.y * other.y)
+
+    override def magnitude: Double =
+      sqrt(this.x * this.x + this.y * this.y)
 
   // Common vectors (optional but nice)
+  /* Queste righe di codice sono dichiarate all'interno del companion object, in quanto
+  rappresentano VALORI STATICI (COSTANTI), essendo vettori di uso comune.
+  Dichiarandole nel companion object sono accessibili globalmente come Vector2D.zero,
+  Vector2D.i e Vector2D.j senza dover creare un'istanza */
   val zero: Vector2D = apply(0.0, 0.0)
   val i: Vector2D = apply(1.0, 0.0) // Unit vector along x-axis
   val j: Vector2D = apply(0.0, 1.0) // Unit vector along y-axis
@@ -56,7 +78,7 @@ object Vector2D:
   // Expected: (3*2, 4*2) = (6.0, 8.0)
   println(s"Scaled: $scaled, x: ${scaled.x}, y: ${scaled.y}")
 
-  val dotProduct = v1.dot(v2)
+  val dotProduct = v1.dot(v2) // v1 dot v2
   // Expected: 3*(-1) + 4*2 = -3 + 8 = 5.0
   println(s"Dot Product: $dotProduct")
 
@@ -69,11 +91,18 @@ object Vector2D:
   println(s"Magnitude of v2: $magV2") // Check if close to 2.236
 
   // Check zero vector and unit vectors if implemented in companion object
-  // println(s"Zero vector: ${Vector2D.zero}")
-  // println(s"Dot product v1.dot(Vector2D.i): ${v1.dot(Vector2D.i)}") // Should be v1.x = 3.0
+  /* Quando usi ${Vector2D.zero}, Scala chiama il metodo toString sull'oggetto
+  Vector2D.zero.
+  La classe Vector2DImpl non definisce esplicitamente un metodo toString, quindi eredita
+  quello predefinito da Any, restituendo come output: ex.Vector2D$Vector2DImpl@hashcode */
+  println(s"Zero vector: ${Vector2D.zero}")
+  println(s"Dot product v1.dot(Vector2D.i): ${v1.dot(Vector2D.i)}")
+  // Should be v1.x = 3.0
 
   val multipleOps = (v1 + v2) * 3.0 - Vector2D(1.0, 1.0)
   // sum = (2.0, 6.0)
   // sum * 3.0 = (6.0, 18.0)
   // (6.0, 18.0) - (1.0, 1.0) = (5.0, 17.0)
   println(s"Multiple Ops: $multipleOps, x: ${multipleOps.x}, y: ${multipleOps.y}")
+
+
