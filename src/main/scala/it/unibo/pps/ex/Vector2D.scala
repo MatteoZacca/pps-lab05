@@ -24,8 +24,18 @@ trait Vector2D:
   def magnitude: Double
 
 object Vector2D:
-  // Factory method to create Vector2D instances
-  def apply(x: Double, y: Double): Vector2D = ???
+  // 1. Hidden Implementation
+  // By making it a case class, we get `equals` and `toString` for free.
+  private case class Vector2DImpl(x: Double, y: Double) extends Vector2D:
+    override def +(other: Vector2D): Vector2D = Vector2DImpl(x + other.x, y + other.y)
+    override def -(other: Vector2D): Vector2D = Vector2DImpl(x - other.x, y - other.y)
+    override def *(scalar: Double): Vector2D = Vector2DImpl(scalar * x, scalar * y)
+    override def dot(other: Vector2D): Double = (x * other.x) + (y * other.y)
+    override def magnitude: Double = sqrt(x * x + y * y)
+
+  // 2. Factory method to create Vector2D instances
+  // Exposes the constructor without exposing the class type itself
+  def apply(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)
 
   // Common vectors (optional but nice)
   val zero: Vector2D = apply(0.0, 0.0)
